@@ -1,9 +1,16 @@
 'use client'
+import React, { useEffect, useState } from 'react';
+// import Chat from '@/components/Chat';
+
+
  
 import { useCompletion } from 'ai/react';
+
+
  
 export default function SloganGenerator() {
-  const { completion, input, handleInputChange, handleSubmit } = useCompletion();
+  const { completion, input, handleInputChange, handleSubmit } = useCompletion({ api: '/api/agent'});
+
  
   return (
     <div className="mx-auto w-full max-w-md py-24 flex flex-col stretch">
@@ -18,7 +25,7 @@ export default function SloganGenerator() {
       {completion ? (
         <div className="whitespace-pre-wrap my-4">{completion}</div>
       ) : (
-        <div>Enter a business description and click enter to generate slogans.</div>
+        <div>Please suggest some activities based on my location and the weather.</div>
       )}
     </div>
   );

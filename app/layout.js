@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google'
+import "tw-elements/dist/css/tw-elements.min.css";
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
