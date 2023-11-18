@@ -1,6 +1,10 @@
 import { NextResponse} from "next/server";
 import OpenAI from "openai";
 import { OpenAIStream, StreamingTextResponse } from 'ai';
+import getLocation ,{getLocationDef}  from "@/components-api/getLocation"
+import getCurrentWeather ,{getCurrentWeatherDef}  from "@/components-api/getCurrentWeather"
+
+
 
  
 const openai = new OpenAI({
@@ -13,47 +17,30 @@ const openai = new OpenAI({
 export const runtime = 'edge';
  
 
-async function getLocation() {
-    const response = await fetch("https://ipapi.co/json/");
-    const locationData = await response.json();
-    return locationData;
-  }
+// async function getLocation() {
+//     const response = await fetch("https://ipapi.co/json/");
+//     const locationData = await response.json();
+//     return locationData;
+//   }
    
-  async function getCurrentWeather(latitude, longitude) {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=apparent_temperature`;
-    const response = await fetch(url);
-    const weatherData = await response.json();
-    return weatherData;
-  }
+//   async function getCurrentWeather(latitude, longitude) {
+//     const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=apparent_temperature`;
+//     const response = await fetch(url);
+//     const weatherData = await response.json();
+//     return weatherData;
+//   }
    
-  const functionDefinitions = [
-    {
-      name: "getCurrentWeather",
-      description:
-        "Get the current weather in a given location given in latitude and longitude",
-      parameters: {
-        type: "object",
-        properties: {
-          latitude: {
-            type: "string",
-          },
-          longitude: {
-            type: "string",
-          },
-        },
-        required: ["longitude", "latitude"],
-      },
-    },
-    {
-      name: "getLocation",
-      description: "Get the user's location based on their IP address",
-      parameters: {
-        type: "object",
-        properties: {},
-      },
-    },
-  ];
+  let functionDefinitions = []
+  
    
+
+ functionDefinitions.push(getLocationDef)
+ functionDefinitions.push(getCurrentWeatherDef)
+
+
+
+
+
   const availableFunctions = {
     getCurrentWeather,
     getLocation,
