@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react';
 // import Chat from '@/components/Chat';
 
-
+// This page calls custom chatGPT agent function   /api/agent, 
  
 import { useCompletion } from 'ai/react';
 
 
  
 export default function SloganGenerator() {
+  //call api rest /api/agent, this 
   const { completion, input, handleInputChange, handleSubmit } = useCompletion({ api: '/api/agent'});
 
  

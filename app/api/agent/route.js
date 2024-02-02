@@ -5,8 +5,8 @@ import getLocation ,{getLocationDef}  from "@/components-api/getLocation"
 import getCurrentWeather ,{getCurrentWeatherDef}  from "@/components-api/getCurrentWeather"
 
 
+/* base code taken from here https://cookbook.openai.com/examples/how_to_build_an_agent_with_the_node_sdk  */
 
- 
 const openai = new OpenAI({
     apiKey: "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",
   });
@@ -16,21 +16,8 @@ const openai = new OpenAI({
 // Set the runtime to edge for best performance
 export const runtime = 'edge';
  
-
-// async function getLocation() {
-//     const response = await fetch("https://ipapi.co/json/");
-//     const locationData = await response.json();
-//     return locationData;
-//   }
    
-//   async function getCurrentWeather(latitude, longitude) {
-//     const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=apparent_temperature`;
-//     const response = await fetch(url);
-//     const weatherData = await response.json();
-//     return weatherData;
-//   }
-   
-  let functionDefinitions = []
+let functionDefinitions = []
   
    
 
@@ -50,7 +37,7 @@ export const runtime = 'edge';
   const messages = [
     {
       role: "system",
-      content: `You are a helpful assistant. Only use the functions you have been provided with. In your reply state the current wetaher and location`,
+      content: `You are a helpful assistant. Only use the functions you have been provided with. In your reply state the current weather and location`,
     },
   ];
 
@@ -64,6 +51,7 @@ export async function POST(req) {
     content:  prompt,
   });
 
+    //Loop to send mesgages and respose back and forth. it will do this upto 5 times then it assumes it cant find answer
     for (let i = 0; i < 5; i++) {
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
@@ -98,6 +86,7 @@ export async function POST(req) {
         console.log(message)
         return new NextResponse(message.content);
       }
+     
     }
     return NextResponse.json( "The maximum number of iterations has been met without a suitable answer. Please try again with a more specific input.");
   }

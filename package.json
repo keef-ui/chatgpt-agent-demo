@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "ai": "^2.2.20",
+    "client-only": "^0.0.1",
     "lodash": "^4.17.21",
     "next": "14.0.1",
     "openai": "^4.15.4",

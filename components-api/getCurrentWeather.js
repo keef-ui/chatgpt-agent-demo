@@ -5,6 +5,8 @@ export default async function getCurrentWeather(latitude, longitude) {
     return weatherData;
   }
 
+// Scheme to describe the function
+  // /* Definition for getCurrentEather - !!Note: the name item is the actual name of the function */
   export const getCurrentWeatherDef =     {
     name: "getCurrentWeather",
     description:
@@ -22,3 +24,5 @@ export default async function getCurrentWeather(latitude, longitude) {
       required: ["longitude", "latitude"],
     },
   }
+
+  

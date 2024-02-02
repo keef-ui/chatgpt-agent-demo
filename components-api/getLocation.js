@@ -4,6 +4,8 @@ export default async function getLocation() {
     return locationData;
   }
 
+
+  // Scheme to describe the function
  
   export const getLocationDef = {
     name: "getLocation",

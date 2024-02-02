@@ -1,8 +1,8 @@
 "use client";
 import { useEffect,useState } from "react";
-import Nav from "../../components/nav"
-import Main from "../../components/main/main-2col-nav"
-import useResizeHelper from "../../components/resizeHelper"
+import Nav from "../../../components/nav"
+import Main from "../../../components/main/main-2col-nav"
+import useResizeHelper from "../../../components/resizeHelper"
 
 const MyComponent = () => {
   let hidden = window.innerWidth<768 ? true : false

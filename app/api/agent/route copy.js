@@ -6,6 +6,8 @@ import { OpenAIStream, StreamingTextResponse } from 'ai';
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+
 async function agent(userInput) {
   messages.push({
     role: "user",
