@@ -16,6 +16,12 @@
   }
 }
 
+@layer components {
+  .pp {
+    @apply py-10 px-40 text-xs; 
+  }
+}
+
 body {
   color: rgb(var(--foreground-rgb));
  
