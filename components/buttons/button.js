@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Button = ({ type, children, onClick, icon, dataAttributes }) => {
-  let buttonStyles = 'py-2 px-4 rounded flex items-center focus:outline-none';
+  let buttonStyles = 'my-2 py-2 px-4 rounded flex items-center focus:outline-none';
 
   // Apply different styles based on the button type
   switch (type) {

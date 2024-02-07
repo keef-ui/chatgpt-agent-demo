@@ -3,19 +3,22 @@ import { useEffect, useState } from "react";
 import Nav from "../../../components/nav";
 import Main from "../../../components/main/main-shares";
 import useResizeHelper from "../../../components/resizeHelper";
-import Card from "../../../components/card/card"
+import Card from "../../../components/card/card";
+import Heading from "@/components/elements/headings";
+
 import { forEach } from "lodash";
-
-
-
+import Button from "@/components/buttons/button";
 
 const MyComponent = () => {
   let hidden = window.innerWidth < 768 ? true : false; //TODO: fix server error window ReferenceError: window is not defined. Also there is refrence in useResizeHelper  as well
 
   const [sideNavHidden, setSideNavHidden] = useState(hidden);
-  const [report, setReport] =useState([])
+  const [report, setReport] = useState([]);
+  const [researchFtse, setResearchFtse] = useState([]);
+  const [researchDow, setResearchDow] = useState([]);
   const isHidden = useResizeHelper(setSideNavHidden);
-  
+
+
   useEffect(() => {
     const init = async () => {
       const { initTE, Sidenav } = await import("tw-elements");
@@ -28,80 +31,91 @@ const MyComponent = () => {
     console.log(sideNavHidden);
     // const report = async () => { const a = await fetch('/api/freport'); return a }
 
-    fetch('/api/freport')
-    .then((res) => res.json())
-    .then((data) => {
-      let newReport=[]
-       data.message.forEach(i => {
-
-        // i[0].forEach(el => {
-        //     console.log(el[10])
-        // });
-           for (let index = 0; index < i[0].length; index++) {
-            // const element = array[index];
-           
-
-            //push to array
-            // newReport.push(i[0][1][0])
-            console.log('lenth---xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------>'+i[0][index].length)
-
-           if( Array.isArray(i[0][index])) {
-                  i[0][index].forEach(el => {
-                  console.log(el)
-                  newReport.push(el)
+    fetch("/api/freport?weeks=2") // Fetch list for upcoming finals
+      .then((res) => res.json())
+      .then((data) => {
+        let newReport = [];
+        data.message.forEach((i) => {
+          for (let index = 0; index < i[0].length; index++) {
+            if (Array.isArray(i[0][index])) {
+              i[0][index].forEach((el) => {
+                console.log(el);
+                newReport.push(el);
               });
+            }
+          }
+        });
+        console.log(newReport);
+        setReport(newReport);
+      });
 
-            } 
 
-            
-           }
+    fetch("/api/share-research?search='Ftse latest'")  // Fetch latest news for ftse, dow etc
+      .then((res) => res.json())
+      .then((data) => {
+        let newReport = [];
 
-          
-          
-       });
-       console.log(newReport)
-       setReport(newReport)
-    })
-    
+        console.log(newReport);
+        setResearchFtse(data.message.results);
+      });
 
+      fetch("/api/share-research?search='dow jones latest'")  // Fetch latest news for ftse, dow etc
+      .then((res) => res.json())
+      .then((data) => {
+        let newReport = [];
+
+        console.log(newReport);
+        setResearchDow(data.message.results);
+      });
+
+      
   }, []);
 
   return (
     <>
       <Nav items={items} sideNavHidden={sideNavHidden} />
       <Main sideNavHidden={sideNavHidden} setSideNavHidden={setSideNavHidden}>
-        <><div class="flex flex-row gap-4 sm:gap-8 lg:gap-10"> 
-          <Card>
-                  <h5 class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-              Card title
-            </h5>
-            <p class="mb-4  text-base text-neutral-600 dark:text-neutral-200 ">
-              {report.map ((i)=> <p> {i[0]} - {i[1]} - {i[2]} </p>)}
+        <>
+          <div class="flex flex-row flex-wrap ">
+            <Card tclass=' w-full xl:w-1/3'>
+                  <Heading variant="h2">Upcoming Final Results</Heading>
+              <p class="mb-4  text-base  dark:text-neutral-200 ">
+                {report.map((i) => (
+                  <p>
+                    {" "}
+                    {i[0]} - {i[1]} - {i[2]}{" "}
+                  </p>
+                ))}
               </p>
-          </Card>
-                <div class="block rounded-lg p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
-            <h5 class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-              Card title
-            </h5>
-            <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <button
-              type="button"
-              class="inline-block rounded bg-primary-500 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-              data-te-ripple-init
-              data-te-ripple-color="light"
-            >
-              Button
-            </button>
+         
+            </Card>
+            <Card tclass='w-full xl:w-2/3 '>
+              <h5 class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
+                FTSE Latest News
+              </h5>
+              <p class="mb-4 text-base  dark:text-neutral-200">
+                {researchFtse.map((i) => (
+                  <p> {i["title"]} <span class='text-xs text-neutral-400'> {i["time"]}</span></p>
+                ))}
+              </p>
+              <Button type="primary">Test Button</Button>
+              <Button type="secondary">Test Button</Button>
+              <Button type="tertiary">Test Button</Button>
+            </Card>
+            <Card tclass='w-full'>
+              <h5 class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
+                DOW Jones Latest news
+              </h5>
+              <p class="mb-4 text-base  dark:text-neutral-200">
+                {researchDow.map((i) => (
+                  <p> {i["title"]} </p>
+                ))}
+              </p>
+            </Card>
           </div>
-          </div>
-          <div
-            class=" opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block py-20"
-            id="tabs-home03"
-            data-te-tab-active
-          >
+
+
+          <Card tclass=''>
             Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
             commodo ligula eget dolor. Aenean massa. Cum sociis natoque
             penatibus et magnis dis parturient montes, nascetur ridiculus mus.
@@ -123,60 +137,8 @@ const MyComponent = () => {
             Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed
             fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed
             consequat, leo eget bibendum sodales, augue velit cursus nunc,
-          </div>
-          <div
-            class=" opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block py-20"
-            id="tabs-profile03"
-          >
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-            commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-            Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
-            Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
-            aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
-            imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede
-            mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum
-            semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
-            porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem
-            ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra
-            nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-            Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies
-            nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-            condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem
-            neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,
-            hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus.
-            Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante.
-            Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed
-            fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed
-            consequat, leo eget bibendum sodales, augue velit cursus nunc,
-          </div>
-          <div
-            class=" opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block py-20"
-            id="tabs-messages03"
-          >
-            xxxxxxxxxxxxxxxxxxxxxxLorem ipsum dolor sit amet, consectetuer
-            adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum
-            sociis natoque penatibus et magnis dis parturient montes, nascetur
-            ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
-            pretium quis, sem. Nulla consequat massa quis enim. Donec pede
-            justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim
-            justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam
-            dictum felis eu pede mollis pretium. Integer tincidunt. Cras
-            dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend
-            tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend
-            ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a,
-            tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque
-            rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur
-            ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas
-            tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit
-            amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel,
-            luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante
-            tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus.
-            Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt.
-            Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis
-            magna. Sed consequat, leo eget bibendum sodales, augue velit cursus
-            nunc,
-          </div>
+            </Card>
+         
           <div
             class=" opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block py-20"
             id="tabs-contact03"
@@ -216,5 +178,3 @@ const items = [
   },
   // ... Additional items with the same structure
 ];
-
-

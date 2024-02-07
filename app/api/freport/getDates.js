@@ -74,4 +74,3 @@ export function createDate(dateString) {
   }
 }
 
-export default promptForDates;
