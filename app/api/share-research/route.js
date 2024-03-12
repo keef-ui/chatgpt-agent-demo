@@ -26,7 +26,7 @@ export  async function GET(req, res) {
     if (req.method === 'GET') {
 
 
-        searchResults(todays_date, null, [searchTerm[1], "d"])
+        // searchResults(todays_date, null, [searchTerm[1], "d"])
 
         return NextResponse.json({message: allresults})
         // Process a POST request

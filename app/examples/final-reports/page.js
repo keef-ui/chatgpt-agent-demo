@@ -15,8 +15,10 @@ const MyComponent = () => {
   const [sideNavHidden, setSideNavHidden] = useState(hidden);
   const [report, setReport] = useState([]);
   const [researchFtse, setResearchFtse] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState("");
   const [researchDow, setResearchDow] = useState([]);
   const isHidden = useResizeHelper(setSideNavHidden);
+  
 
 
   useEffect(() => {
@@ -31,45 +33,68 @@ const MyComponent = () => {
     console.log(sideNavHidden);
     // const report = async () => { const a = await fetch('/api/freport'); return a }
 
-    fetch("/api/freport?weeks=2") // Fetch list for upcoming finals
-      .then((res) => res.json())
-      .then((data) => {
-        let newReport = [];
-        data.message.forEach((i) => {
-          for (let index = 0; index < i[0].length; index++) {
-            if (Array.isArray(i[0][index])) {
-              i[0][index].forEach((el) => {
-                console.log(el);
-                newReport.push(el);
-              });
-            }
-          }
-        });
-        console.log(newReport);
-        setReport(newReport);
-      });
 
 
-    fetch("/api/share-research?search='Ftse latest'")  // Fetch latest news for ftse, dow etc
+
+      if (selectedCompany!=="") { 
+        let companyFetch= `/api/share-research?search='${selectedCompany}'`
+      fetch(companyFetch)  // Fetch latest news for company
       .then((res) => res.json())
       .then((data) => {
         let newReport = [];
 
-        console.log(newReport);
+        console.log("--------------------------------------->",selectedCompany);
+        console.log(data.message.results)
         setResearchFtse(data.message.results);
       });
+      } else {
+        fetch("/api/share-research?search='ftse latest'")  // Fetch latest news for ftse, dow etc
+        .then((res) => res.json())
+        .then((data) => {
+          let newReport = [];
+  
+          console.log(newReport);
+          setResearchFtse(data.message.results);
+        });
 
-      fetch("/api/share-research?search='dow jones latest'")  // Fetch latest news for ftse, dow etc
-      .then((res) => res.json())
-      .then((data) => {
-        let newReport = [];
+        fetch("/api/share-research?search='dow jones latest'")  // Fetch latest news for ftse, dow etc
+        .then((res) => res.json())
+        .then((data) => {
+          let newReport = [];
+  
+          console.log(newReport);
+          setResearchDow(data.message.results);
+        });
 
-        console.log(newReport);
-        setResearchDow(data.message.results);
-      });
 
+        
+        fetch("/api/freport?weeks=2") // Fetch list for upcoming finals
+        .then((res) => res.json())
+        .then((data) => {
+          let newReport = [];
+          data.message.forEach((i) => {
+            for (let index = 0; index < i[0].length; index++) {
+              if (Array.isArray(i[0][index])) {
+                i[0][index].forEach((el) => {
+                  console.log(el);
+                  newReport.push(el);
+                });
+              }
+            }
+          });
+          console.log(newReport);
+          setReport(newReport);
+        });
+
+      }
+
+      console.log(selectedCompany,researchFtse);
       
-  }, []);
+  }, [selectedCompany]);
+  const handleCompanySelect =(e)=>{
+    // console.log(e.target.innerHTML)
+    setSelectedCompany(e.target.innerHTML)
+  }
 
   return (
     <>
@@ -83,7 +108,7 @@ const MyComponent = () => {
                 {report.map((i) => (
                   <p>
                     {" "}
-                    {i[0]} - {i[1]} - {i[2]}{" "}
+                    {i[0]} - <a href='#' onClick={handleCompanySelect}>{i[1]}</a> - {i[2]}{" "}
                   </p>
                 ))}
               </p>
@@ -95,7 +120,7 @@ const MyComponent = () => {
               </h5>
               <p class="mb-4 text-base  dark:text-neutral-200">
                 {researchFtse.map((i) => (
-                  <p><a href={i["link"]}> {i["title"]} <span class='text-xs text-neutral-400'> {i["time"]}</span></a></p>
+                  <p> <a href={i["link"]}> {i["title"]} <span class='text-xs text-neutral-400'> {i["time"]}</span></a></p>
                 ))}
               </p>
               <Button type="primary">Test Button</Button>
