@@ -114,11 +114,7 @@ const MyComponent = () => {
               </h5>
               <p class="mb-4 text-base  dark:text-neutral-200">
                 {researchFtse.map((i) => (
-                  <p>
-                    {" "}
-                    {i["title"]}{" "}
-                    <span class="text-xs text-neutral-400"> {i["time"]}</span>
-                  </p>
+                  <p><a href={i["link"]}> {i["title"]} <span class='text-xs text-neutral-400'> {i["time"]}</span></a></p>
                 ))}
               </p>
             </Card>
