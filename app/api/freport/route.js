@@ -1,5 +1,5 @@
 import { NextResponse,NextRequest } from 'next/server';
-import {reportList}  from "/crap/aa-webscarping/nexjs/finalReportsForBatchOfDates"
+import { reportList } from "/temp-crap/aa-webscrapping-ai/aa-webscrapping-nodejs/nexjs/finalReportsForBatchOfDates";
 
 export  async function GET(req, res) {
     //:TODO: pass numberOfWeeks, defaults to 3 at the moment

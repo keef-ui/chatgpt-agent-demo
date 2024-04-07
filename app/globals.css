@@ -26,3 +26,46 @@ body {
   color: rgb(var(--foreground-rgb));
  
 }
+
+.react-aria-ModalOverlay {
+  height: var(--visual-viewport-height);
+  z-index: 100;
+  background: #00000080;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.modal {
+  background: white;
+  border: 1px solid var(--gray-400);
+  border-radius: 6px;
+  outline: none;
+  width: 60vw;
+  max-width: 60vw;
+  box-shadow: 0 8px 20px #0000001a;
+}
+
+.modal[data-entering] {
+  animation: slide 300ms;
+}
+
+.modal[data-exiting] {
+  animation: slide 300ms reverse;
+}
+
+@keyframes slide {
+  from {
+    transform:scale(0.8);
+    opacity: 0.5;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

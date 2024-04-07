@@ -7,7 +7,10 @@ import Card from "../../../components/card/card";
 import Heading from "@/components/elements/headings";
 
 import { forEach } from "lodash";
-import Button from "@/components/buttons/button";
+// import Button from "@/components/buttons/button";
+import { ModalUi } from "@/components/modal/ModalUi";
+import News from "./news";
+import { Button, DialogTrigger } from "react-aria-components";
 
 const MyComponent = () => {
   let hidden = window.innerWidth < 768 ? true : false; //TODO: fix server error window ReferenceError: window is not defined. Also there is refrence in useResizeHelper  as well
@@ -17,6 +20,7 @@ const MyComponent = () => {
   const [researchFtse, setResearchFtse] = useState([]);
   const [researchDow, setResearchDow] = useState([]);
   const isHidden = useResizeHelper(setSideNavHidden);
+  const [currentSearch, setCurrentSearch] = useState(null);
 
 
   useEffect(() => {
@@ -77,32 +81,48 @@ const MyComponent = () => {
       <Main sideNavHidden={sideNavHidden} setSideNavHidden={setSideNavHidden}>
         <>
           <div class="flex flex-row flex-wrap ">
-            <Card tclass=' w-full xl:w-1/3'>
-                  <Heading variant="h2">Upcoming Final Results</Heading>
+            <Card tclass=" w-full xl:w-1/3">
+              <Heading variant="h2">Upcoming Final Results</Heading>
               <p class="mb-4  text-base  dark:text-neutral-200 ">
                 {report.map((i) => (
                   <p>
                     {" "}
-                    {i[0]} - {i[1]} - {i[2]}{" "}
+                    {i[0]} -{" "}
+                    <DialogTrigger>
+                      <Button
+                        onPress={(e) => setCurrentSearch(e.target.innerHTML)}
+                      >
+                        {i[1]}
+                      </Button>
+                      <ModalUi>
+                        <>
+                          <div>
+                            {" "}
+                            <News search={currentSearch} />
+                          </div>
+                        </>
+                      </ModalUi>
+                    </DialogTrigger>{" "}
+                    - {i[2]}{" "}
                   </p>
                 ))}
               </p>
-         
             </Card>
-            <Card tclass='w-full xl:w-2/3 '>
+            <Card tclass="w-full xl:w-2/3 ">
               <h5 class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
                 FTSE Latest News
               </h5>
               <p class="mb-4 text-base  dark:text-neutral-200">
                 {researchFtse.map((i) => (
-                  <p> {i["title"]} <span class='text-xs text-neutral-400'> {i["time"]}</span></p>
+                  <p>
+                    {" "}
+                    {i["title"]}{" "}
+                    <span class="text-xs text-neutral-400"> {i["time"]}</span>
+                  </p>
                 ))}
               </p>
-              <Button type="primary">Test Button</Button>
-              <Button type="secondary">Test Button</Button>
-              <Button type="tertiary">Test Button</Button>
             </Card>
-            <Card tclass='w-full'>
+            <Card tclass="w-full">
               <h5 class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
                 DOW Jones Latest news
               </h5>
@@ -114,37 +134,6 @@ const MyComponent = () => {
             </Card>
           </div>
 
-
-          <Card tclass=''>
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-            commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-            Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
-            Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
-            aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
-            imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede
-            mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum
-            semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
-            porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem
-            ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra
-            nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-            Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies
-            nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-            condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem
-            neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar,
-            hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus.
-            Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante.
-            Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed
-            fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed
-            consequat, leo eget bibendum sodales, augue velit cursus nunc,
-            </Card>
-         
-          <div
-            class=" opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block py-20"
-            id="tabs-contact03"
-          >
-            Tab 4 content
-          </div>
         </>
       </Main>
     </>
