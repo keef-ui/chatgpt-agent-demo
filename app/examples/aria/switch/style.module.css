@@ -1,0 +1,49 @@
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 0.571rem;
+  font-size: 1.143rem;
+  color: var(--text-color);
+  forced-color-adjust: none;
+}
+.switch .indicator {
+  font-size: 1em;
+  width: 2em;
+  height: 1.143em;
+  border: 2px solid var(--border-color);
+  background: var(--background-color);
+  border-radius: 1.143em;
+  transition: all 200ms;
+}
+.switch .indicator:before {
+  content: '';
+  display: block;
+  margin: 0.05em;
+  width: 0.857em;
+  height: 0.857em;
+  background: var(--highlight-background);
+  border-radius: 16px;
+  transition: all 200ms;
+}
+.switch[data-pressed] .indicator {
+  border-color: var(--border-color-pressed);
+}
+.switch[data-pressed] .indicator:before {
+  background: var(--highlight-background-pressed);
+}
+.switch[data-selected] .indicator {
+  border-color: var(--highlight-background);
+  background: var(--highlight-background);
+}
+.switch[data-selected] .indicator:before {
+  background: var(--field-background);
+  transform: translateX(100%);
+}
+.switch[data-selected][data-pressed] .indicator {
+  border-color: var(--highlight-background-pressed);
+  background: var(--highlight-background-pressed);
+}
+.switch[data-focus-visible] .indicator {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: 2px;
+}

@@ -1,0 +1,69 @@
+/* Navbar.module.css */
+.navbar {
+    width: 100%;
+    min-height: 6vh;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eee;
+    /* transition: all 0.7s ease-in; */
+  }
+  
+  .scrolled {
+    position: sticky;
+    top:0;
+    left: 0;
+    background-color: rgb(199 199 199 / 19%);
+    z-index: 100;  
+    animation: animate 0.5s ; /* Apply the animation */
+  }
+  
+  .logo img {
+    width: 50px;
+  }
+  
+  .navigation {
+    /* Your navigation styles */
+  }
+  
+
+
+
+
+@keyframes animate {
+    0% {
+        top: -100px; /* Initial position */
+    }
+    100% {
+        top: 0px; /* Final position after animation */
+    }
+}
+
+.button {
+    color: var(--text-color);
+    background: var(--button-background);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    appearance: none;
+    vertical-align: middle;
+    font-size: 1rem;
+    text-align: center;
+    margin: 0;
+    outline: none;
+    padding: 6px 10px;
+    text-decoration: none;
+}
+.button[data-pressed] {
+    box-shadow: inset 0 1px 2px #000;
+    background: var(--button-background-pressed);
+    border-color: var(--border-color-pressed);
+}
+.button[data-focus-visible] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -1px;
+}
+
+
+
+.button svg {display:inline-block;}
