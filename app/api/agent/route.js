@@ -8,8 +8,8 @@ import getCurrentWeather ,{getCurrentWeatherDef}  from "@/components-api/getCurr
 /* base code taken from here https://cookbook.openai.com/examples/how_to_build_an_agent_with_the_node_sdk  */
 
 const openai = new OpenAI({
-    apiKey: "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",
-  });
+  apiKey: process.env.OPENAI_API_KEY,
+});
  
  
 
