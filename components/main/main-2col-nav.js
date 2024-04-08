@@ -2,6 +2,7 @@ import IconButton from "../buttons/button-icon"
 // import Button2 from "../buttons/button"
 import { useEffect , useState} from "react";
 import { Item, useSelectState } from "react-stately";
+import Navbar from "../sticky-nav/sticky-nav";
 
   import {
     Button,
@@ -52,7 +53,10 @@ const Main = ({sideNavHidden,setSideNavHidden}) => {
         }`}
         id="xxxxcontent"
       >
+
+       
         <div class="my-2 lg:w-4/5">
+          <Navbar />
           <div
             class=" opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block py-20"
             id="tabs-home03"
