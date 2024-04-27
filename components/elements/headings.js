@@ -8,7 +8,7 @@ const Heading = ({ variant, children }) => {
       headingClasses = 'mb-2 text-4xl font-medium leading-tight text-neutral-800 dark:text-neutral-50 break-words'; // Customize size and color for h1
       break;
     case 'h2':
-      headingClasses = 'mb-2 text-2xl font-medium leading-tight text-neutral-800 dark:text-neutral-50 break-words'; // Customize size and color for h2
+      headingClasses = 'mb-2 text-lg font-medium leading-tight text-neutral-800 dark:text-neutral-50 break-words'; // Customize size and color for h2
       break;
     case 'h3':
       headingClasses = 'mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50 break-words'; // Customize size and color for h3
