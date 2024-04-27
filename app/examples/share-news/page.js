@@ -1,16 +1,19 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import Nav from "../../../components/nav";
 import Main from "../../../components/main/main-shares";
 import useResizeHelper from "../../../components/resizeHelper";
 import Card from "../../../components/card/card";
 import Heading from "@/components/elements/headings";
+import ListBox from "@/components/listBox/listBox";
+import { isDateInThisWeek } from "@/components/dateHelpers/dateHelpers";
+
 
 import { forEach } from "lodash";
 // import Button from "@/components/buttons/button";
-import { ModalUi } from "@/components/modal/ModalUi";
+import { Modal } from "@/components/modal/ModalUi";
 import News from "./news";
-import { Button, DialogTrigger } from "react-aria-components";
+import { Button, DialogTrigger,ButtonContext,Modal as ModalB, ModalContext } from "react-aria-components";
 
 const MyComponent = () => {
   let hidden = window.innerWidth < 768 ? true : false; //TODO: fix server error window ReferenceError: window is not defined. Also there is refrence in useResizeHelper  as well
@@ -21,8 +24,9 @@ const MyComponent = () => {
   const [researchDow, setResearchDow] = useState([]);
   const isHidden = useResizeHelper(setSideNavHidden);
   const [currentSearch, setCurrentSearch] = useState(null);
+  let [isOpen, setOpen] = useState(false)
 
-
+  const searchContext= createContext();
   useEffect(() => {
     const init = async () => {
       const { initTE, Sidenav } = await import("tw-elements");
@@ -82,6 +86,44 @@ const MyComponent = () => {
         <>
           <div class="flex flex-row flex-wrap ">
             <Card tclass=" w-full xl:w-1/3">
+              <searchContext.Provider value={setCurrentSearch}>
+                {/* https://react-spectrum.adobe.com/react-aria/advanced.html */}
+                <ButtonContext.Provider
+                  value={{
+                    slots: {
+                      search: {
+                        onPress: (e) => {
+                          setOpen(true);
+                        },
+                      },
+                      button2: {
+                        onPress: (e) => {
+                          setOpen(true);
+                        },
+                      },
+                    },
+                  }}
+                >
+                  {" "}
+                  <ModalContext.Provider
+                    value={{ isOpen, onOpenChange: setOpen }}
+                  >
+                    <Modal slot="button2">
+                      <>
+                        <div>
+                          {" "}
+                          <News search={currentSearch} />
+                        </div>
+                      </>
+                    </Modal>
+                  </ModalContext.Provider>
+                  <ListBox
+                    dataArray={report}
+                    setCurrentSearch={setCurrentSearch}
+                  />
+                </ButtonContext.Provider>
+              </searchContext.Provider>
+
               <Heading variant="h2">Upcoming Final Results</Heading>
               <p class="mb-4  text-base  dark:text-neutral-200 ">
                 {report.map((i) => (
@@ -94,14 +136,14 @@ const MyComponent = () => {
                       >
                         {i[1]}
                       </Button>
-                      <ModalUi>
+                      <Modal>
                         <>
                           <div>
                             {" "}
                             <News search={currentSearch} />
                           </div>
                         </>
-                      </ModalUi>
+                      </Modal>
                     </DialogTrigger>{" "}
                     - {i[2]}{" "}
                   </p>
@@ -114,7 +156,13 @@ const MyComponent = () => {
               </h5>
               <p class="mb-4 text-base  dark:text-neutral-200">
                 {researchFtse.map((i) => (
-                  <p><a href={i["link"]}> {i["title"]} <span class='text-xs text-neutral-400'> {i["time"]}</span></a></p>
+                  <p>
+                    <a href={i["link"]}>
+                      {" "}
+                      {i["title"]}{" "}
+                      <span class="text-xs text-neutral-400"> {i["time"]}</span>
+                    </a>
+                  </p>
                 ))}
               </p>
             </Card>
@@ -129,7 +177,6 @@ const MyComponent = () => {
               </p>
             </Card>
           </div>
-
         </>
       </Main>
     </>

@@ -3,13 +3,13 @@ import IconButton from "../buttons/button-icon"
 import { useEffect , useState} from "react";
 import { Item, useSelectState } from "react-stately";
 import Navbar from "../sticky-nav/sticky-nav";
+import Popover from "../popover/popver";
 
   import {
     Button,
     Label,
     ListBox,
     ListBoxItem,
-    Popover,
     Select,
     SelectValue,
   } from "react-aria-components";

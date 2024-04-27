@@ -32,19 +32,15 @@ const News = ({search}) => {
 
   return (
     <>
-      <div class="flex flex-row flex-wrap ">
-        <Card tclass='w-full  '>
-              <h5 class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-                Latest News For {search}
-              </h5>
-              <p class="mb-4 text-base  dark:text-neutral-200">
-                {researchFtse.map((i) => (
-                  <p> {i["title"]} <span class='text-xs text-neutral-400'> {i["time"]}</span></p>
-                ))}
-              </p>
-  
-            </Card>
-      </div>
+      <p class="mb-4 text-base  dark:text-neutral-200 ">
+        {researchFtse.map((i) => (
+          <p>
+            {" "}
+            {i["title"]}{" "}
+            <span class="text-xs text-neutral-400"> {i["time"]}</span>
+          </p>
+        ))}
+      </p>
     </>
   );
 };

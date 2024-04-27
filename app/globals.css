@@ -121,6 +121,22 @@
   }
 }
 
+:root {
+  --space-unit: 1rem;
+  --space-xxs: calc(0.25 * var(--space-unit));/* 4px   */
+  --space-xs: calc(0.5 * var(--space-unit));  /* 8px */
+  --space-sm: calc(0.75 * var(--space-unit));  /* 12px */
+  --space-md: calc(1.25 * var(--space-unit));  /* 20px */
+  --space-lg: calc(2 * var(--space-unit));  /* 32px */
+  --space-xl: calc(3.25 * var(--space-unit));  /* 52px */
+  --space-xxl: calc(5.25 * var(--space-unit));  /* 84px */
+
+
+  --line-height-base: 1.5;
+  --line-height: var(--line-height-base);
+}
+
+p {line-height: var(--line-height)}
 
 @layer components {
   .pp {
@@ -151,9 +167,10 @@ body {
   border: 1px solid var(--gray-400);
   border-radius: 6px;
   outline: none;
-  width: 60vw;
-  max-width: 60vw;
   box-shadow: 0 8px 20px #0000001a;
+  width: 60vw;
+  min-width: 60vw;
+  overflow: visible;
 }
 
 .modal[data-entering] {
@@ -176,6 +193,13 @@ body {
   }
 }
 
+.dialog > div > div {
+
+ 
+  /* max-height: 40vh; */
+  /* height: 40vh;
+  overflow:auto; */
+}
 
 .react-aria-Popover {
   --background-color: var(--overlay-background);
@@ -266,3 +290,107 @@ body {
   .react-aria-Dialog:focus-visible {
     border: 0px solid var(--border-color);
   }
+
+
+.marquee {
+    --marquee-width: 80vw;
+      --marquee-height: 20vh;
+      --marquee-elements: 4;
+      /* defined with JavaScript */
+      --marquee-elements-displayed: 4;
+      --marquee-element-width: calc(var(--marquee-width) / var(--marquee-elements-displayed));
+      --marquee-animation-duration: calc(var(--marquee-elements) * 3s);
+   
+          width: var(--marquee-width);
+          height: var(--marquee-height);
+          background-color: #111;
+          color: #eee;
+          overflow: hidden;
+          position: relative;
+
+}
+
+.marquee-content>div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
+  flex-shrink: 0;
+  width: var(--marquee-element-width);
+  max-height: 100%;
+  font-size: calc(var(--marquee-height)*3/4);
+  /* 5rem; */
+  white-space: nowrap;
+}
+
+    .marquee-content[data-orientation=horizontal],
+    .marquee-content[data-layout=grid] {
+      display: flex;
+      flex-direction: row;
+      width: fit-content;
+      height: 100%;
+      padding: 4px;
+        animation: scrolling var(--marquee-animation-duration) linear infinite;
+  
+      .marquee-contentItem {
+        position: relative;
+        margin: 0;
+        padding: 4px;
+  
+        & img {
+          object-fit: cover;
+          aspect-ratio: 1/1;
+          max-width: 150px;
+          margin-bottom: 4px;
+          border-radius: 4px;
+          transition: box-shadow 200ms;
+        }
+  
+        &[data-hovered] {
+          & img {
+            box-shadow: 0 0 8px rgb(from slateblue r g b / 0.5);
+          }
+        }
+  
+        &[data-selected] {
+          background: none;
+          color: inherit;
+  
+          & img {
+            box-shadow: 0 0 12px rgb(from slateblue r g b / 0.8);
+          }
+  
+          &:after {
+            content: '✓';
+            content: '✓' / '';
+            alt: ' ';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--highlight-background);
+            border: 2px solid var(--highlight-foreground);
+            color: var(--highlight-foreground);
+            width: 22px;
+            height: 22px;
+            border-radius: 22px;
+            box-sizing: border-box;
+            font-size: 14px;
+            line-height: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 8px rgb(0 0 0 / .5);
+          }
+        }
+      }
+    }
+
+        @keyframes scrolling {
+          0% {
+            transform: translateX(0);
+          }
+    
+          100% {
+            transform: translateX(calc(-1 * var(--marquee-element-width) * var(--marquee-elements)));
+          }
+        }

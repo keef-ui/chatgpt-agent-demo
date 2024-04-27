@@ -4,7 +4,7 @@ import useResizeHelper from "../../../components/resizeHelper";
 import Card from "../../../components/card/card";
 import Heading from "@/components/elements/headings";
 import { Button, DialogTrigger } from "react-aria-components";
-import { ModalUi } from "@/components/modal/ModalUi";
+import { Modal } from "./ModalUi";
 import News from "./news";
 
 import { forEach } from "lodash";
@@ -51,14 +51,14 @@ const [currentSearch, setCurrentSearch] = useState(null);
                   <Button onPress={(e) => setCurrentSearch(e.target.innerHTML)}>
                     {i[1]}
                   </Button>
-                  <ModalUi>
+                  <Modal title={`The Latest News For ${currentSearch}`}>
                     <>
                       <div>
                         {" "}
                         <News search={currentSearch} />
                       </div>
                     </>
-                  </ModalUi>
+                  </Modal>
                 </DialogTrigger>{" "}
                 - {i[2]}{" "}
               </p>

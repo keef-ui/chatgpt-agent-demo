@@ -5,23 +5,27 @@ import {
   Heading,
   Input,
   Label,
-  Modal,
+  Modal as ModelAria,
   TextField,
 } from "react-aria-components";
+import styles from "./Modal.module.css"
 
-export function ModalUi({ search, children }) {
+
+export function Modal({ search, children, slot="default"}) {
   return (
-    <Modal className="modal">
-      <Dialog className="dialog">
+    <ModelAria className={styles.modal}>
+      <Dialog className={styles.dialog}>
         {({ close }) => (
           <>
-            {children}
-            <Button onPress={close} style={{ marginTop: 8 }}>
+            <div className="flex-1 overflow-auto h-[50vh]">
+              <div className=" h-[40vh]">{children}</div>
+            </div>
+            <Button slot={slot} onPress={close} style={{ marginTop: 8 }}>
               Submit
             </Button>
           </>
         )}
       </Dialog>
-    </Modal>
+    </ModelAria>
   );
 }

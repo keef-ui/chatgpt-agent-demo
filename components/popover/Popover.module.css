@@ -1,0 +1,70 @@
+.popover {
+    --background-color: var(--overlay-background);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, );
+    border-radius: 6px;
+    background: var(--background-color);
+    color: var(--text-color);
+    outline: none;
+    max-width: 250px;
+    box-sizing: border-box;
+    padding: 30px;
+}
+.popover .overlayArrow svg {
+    display: block;
+    fill: var(--background-color);
+    stroke: var(--border-color);
+    stroke-width: 1px;
+}
+.popover[data-placement=top] {
+    --origin: translateY(8px);
+}
+.popover[data-placement=top]:has(.overlayArrow) {
+    margin-bottom: 6px;
+}
+.popover[data-placement=bottom] {
+    --origin: translateY(-8px);
+}
+.popover[data-placement=bottom]:has(.overlayArrow) {
+    margin-top: 6px;
+}
+.popover[data-placement=bottom] .overlayArrow svg {
+    transform: rotate(180deg);
+}
+.popover[data-placement=right] {
+    --origin: translateX(-8px);
+}
+.popover[data-placement=right]:has(.overlayArrow) {
+    margin-left: 6px;
+}
+.popover[data-placement=right] .overlayArrow svg {
+    transform: rotate(90deg);
+}
+.popover[data-placement=left] {
+    --origin: translateX(8px);
+}
+.popover[data-placement=left]:has(.overlayArrow) {
+    margin-right: 6px;
+}
+.popover[data-placement=left] .overlayArrow svg {
+    transform: rotate(-90deg);
+}
+.popover[data-entering] {
+    animation: popover-slide 200ms;
+}
+.popover[data-exiting] {
+    animation: popover-slide 200ms reverse ease-in;
+}
+@keyframes popover-slide {
+    from {
+        transform: var(--origin);
+        opacity: 0;
+   }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+   }
+}
+.dialog:focus-visible {
+    border: 0px solid var(--border-color);
+}
