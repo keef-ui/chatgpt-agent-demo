@@ -1,6 +1,7 @@
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import OpenAI from "openai";
 import getTickerCode ,{getCompanyNews, getShareQuote} from "./tradingfunctions";
+import { isArguments } from "lodash";
 
 
 // Create an OpenAI API client (that's edge friendly!)
@@ -57,6 +58,17 @@ const functions = [
       properties: {},
     },
   },
+  {
+    name: "getShareQuote",
+    description:
+      "Use this function when ever you are asked to get share quotes. Return what ever this funtion returnsGets stock market share quotes for London stock exchange.The quotes are in british pence, convert it into pounds. This function parameter will not have '.l' or '.L' suffix. if ticker has this suffix please remove the suffix ",
+    parameters: {
+      type: "object",
+      properties: {
+        ticker: { type: "string" },
+      },
+    },
+  },
 ];
 
 const messages=[]
@@ -81,7 +93,7 @@ export async function POST(req) {
 const stream = OpenAIStream(response, {
   experimental_onFunctionCall: async (
     { name, arguments: args },
-    createFunctionCallMessages
+    createFunctionCallMessages, functions
   ) => {
     // if you skip the function call and return nothing, the `function_call`
     // message will be sent to the client for it to handle
@@ -104,9 +116,16 @@ const stream = OpenAIStream(response, {
        functionData = await getCompanyNews();
        console.log('------------>',name);
      }
-console.log(functionData);
+
+        if (name === "getShareQuote") {
+          // Call a weather API here
+          functionData = await getShareQuote(args.ticker);
+          console.log("------------>", name, args);
+        }
+console.log();
       // `createFunctionCallMessages` constructs the relevant "assistant" and "function" messages for you
       const newMessages = createFunctionCallMessages(functionData);
+      console.log(newMessages);
       return openai.chat.completions.create({
         messages: [...messages, ...newMessages],
         stream: true,
