@@ -1,128 +1,4 @@
-import { NextResponse } from "next/server";
-import OpenAI from "openai";
-import { OpenAIStream, StreamingTextResponse } from "ai";
-import getLocation, { getLocationDef } from "@/components-api/getLocation";
-import getCurrentWeather, {
-  getCurrentWeatherDef,
-} from "@/components-api/getCurrentWeather";
-
-/* base code taken from here https://cookbook.openai.com/examples/how_to_build_an_agent_with_the_node_sdk  */
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const getTickerCodeDef = {
-  name: "getTickerCode",
-  description:
-    "Get the all aim listed and ftse250 company names and ticker code in the form of a string. The returned object will be an object called csv with 2 items (aim and ftse250) ",
-  parameters: {
-    type: "object",
-    properties: { 
-      ticker: {type:"object", 
-            properties: {
-              aim:{},
-              ftse250:{}
-            }}
-     },
-  },
-};
-
-const getNewsDef = {
-  name: "getCompanyNews",
-  description: "Gets news items from google",
-  parameters: {
-    type: "object",
-    properties: {},
-  },
-};
-
-const getShareQuoteDef = {
-  name: "getShareQuote",
-  description:
-    "Use this function when ever you are asked to get share quotes. Return what ever this funtion returnsGets stock market share quotes for London stock exchange.The quotes are in british pence, convert it into pounds. This function parameter will not have '.l' or '.L' suffix. if ticker has this suffix please remove the suffix ",
-  parameters: {
-    type: "object",
-    properties: {
-      ticker: { type: "string" },
-    },
-  },
-};
-
-// Set the runtime to edge for best performance
-export const runtime = "edge";
-
-let functionDefinitions = [];
-
-functionDefinitions.push(getTickerCodeDef);
-functionDefinitions.push(getNewsDef);
-functionDefinitions.push(getShareQuoteDef);
-
-const availableFunctions = {
-  getTickerCode,
-  getCompanyNews,
-  getShareQuote,
-};
-
-const messages = [
-  {
-    role: "system",
-    content: `You are a helpful assistant. Only use the functions you have been provided with. Share information . To get share quotes for a comapy first  find company ticker symbol with funtion getTickerCode, then use getShareQuote with the ticker as the argument`,
-  },
-];
-
-export async function POST(req) {
-  const { prompt } = await req.json();
-
-  messages.push({
-    role: "user",
-    content: prompt,
-  });
-
-  //Loop to send mesgages and respose back and forth. it will do this upto 5 times then it assumes it cant find answer
-  for (let i = 0; i < 5; i++) {
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: messages,
-      functions: functionDefinitions,
-      
-    });
-
-    const { finish_reason, message } = response.choices[0];
-
-    if (finish_reason === "function_call") {
-     
-      const functionName = message.function_call.name;
-      const functionToCall = availableFunctions[functionName];
-      const functionArgs = JSON.parse(message.function_call.arguments);
-      const functionArgsArr = Object.values(functionArgs);
-      const functionResponse = await functionToCall.apply(
-        null,
-        functionArgsArr
-      );
- console.log(functionArgsArr, functionToCall, functionResponse);
-      messages.push({
-        role: "function",
-        name: functionName,
-        content: `
-                  The result of the last function was this: ${JSON.stringify(
-                    functionResponse
-                  )}
-                  `,
-      });
-    } else if (finish_reason === "stop") {
-      messages.push(message);
-
-      console.log(messages);
-      return new NextResponse(message.content);
-    }
-  }
-  return NextResponse.json(
-    "The maximum number of iterations has been met without a suitable answer. Please try again with a more specific input."
-  );
-}
-
-function getTickerCode() {
+export default function getTickerCode() {
   return {
     ticker: {
       aim: `"TICKER Symbol","Company Name"
@@ -1027,9 +903,8 @@ function getTickerCode() {
   };
 }
 
-// Scheme to describe the function
 
-async function getCompanyNews() {
+export async function getCompanyNews() {
   async function fetchNewsJSON() {
     const response = await fetch(
       "http://localhost:3000/api/share-research?search='Ftse latest'"
@@ -1043,7 +918,7 @@ async function getCompanyNews() {
   return news;
 }
 
-async function getShareQuote(ticker) {
+export async function getShareQuote(ticker) {
   async function fetchQuoteJSON() {
     const response = await fetch(
       `http://localhost:3000/api/yahoo?symbol=${ticker}.l`

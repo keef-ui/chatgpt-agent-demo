@@ -50,7 +50,7 @@ export async function POST(req) {
     role: "user",
     content:  prompt,
   });
-
+console.log("------------------->",prompt)
     //Loop to send mesgages and respose back and forth. it will do this upto 5 times then it assumes it cant find answer
     for (let i = 0; i < 5; i++) {
       const response = await openai.chat.completions.create({
