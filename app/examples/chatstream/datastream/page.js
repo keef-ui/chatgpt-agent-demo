@@ -10,9 +10,20 @@ import { useCompletion } from 'ai/react';
  
 export default function SloganGenerator() {
   //call api rest /api/agent, this 
-  const { completion, input, handleInputChange, handleSubmit,data } = useCompletion({
-    api: "/api/chatstream/datastream",
-  });
+  const { completion, input, handleInputChange, handleSubmit, data,isLoading } =
+    useCompletion({
+      api: "/api/chatstream/datastream",
+      onFinish: () => {
+        console.log("yessssssss.........");
+      },
+    });
+
+  useEffect(() => {
+   
+   console.log("test", completion);
+  
+  })
+  
 
  
   return (
@@ -32,7 +43,7 @@ export default function SloganGenerator() {
         </div>
       ) : (
         <div>
-          Please suggest some activities based on my location and the weather.
+          This is example of data stream it it returns exra data item as well as chat response
         </div>
       )}
     </div>

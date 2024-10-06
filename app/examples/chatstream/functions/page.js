@@ -28,7 +28,7 @@ export default function SloganGenerator() {
       {completion ? (
         <div className="whitespace-pre-wrap my-4">{completion}</div>
       ) : (
-        <div>Please suggest some activities based on my location and the weather.</div>
+        <div>Get share price and news for ftse 250 and aim.</div>
       )}
     </div>
   );
